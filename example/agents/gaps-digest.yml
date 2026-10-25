@@ -1,0 +1,13 @@
+# SEED EXAMPLE. An agent that may run without a per-run approval, and the reason
+# it may: it reads only the program's own records, which a person has already
+# reviewed, never attacker-authored text. Compare ttp-extractor.
+name: gaps-digest
+trigger: weekly
+model: example-frontier-model
+approval: autonomous
+untrusted_inputs: false
+evaluation_set: evals/gaps-digest/
+budget_usd_per_day: 2
+blind_spots:
+  - Reports a named gap as open without checking whether the owner has since closed it elsewhere
+  - Cannot tell a gap that is cheap to close from one that needs a purchase decision

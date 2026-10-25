@@ -1,0 +1,26 @@
+# SEED EXAMPLE. Shape and content are both inferences drawn from the threat
+# profile rather than from an estate. See docs/CONTRACTS.md.
+id: PIR-03
+title: Settlement diversion or ledger export theft by an external actor
+status: active
+retired_reason: null
+consumer: [security-lead, customer-trust]
+decision: >
+  Whether to change egress controls on ledger export storage, and whether to
+  notify the affected shippers and carriers before confirmation.
+threat_profile_refs: [CJ-01, ACTOR-02]
+eei:
+  - id: EEI-03-1
+    question: Which egress paths from ledger export storage are unmonitored?
+    sources: [SRC-04]
+    gap: null
+  - id: EEI-03-2
+    question: Which actors have demonstrated intent against freight and payment platforms?
+    sources: [SRC-01]
+    gap: >
+      Partial only. SRC-01 sees actors that get written up publicly, which lags
+      and omits the ones nobody has reported yet. Closing it needs paid actor
+      reporting, which is a purchase decision rather than a build.
+review:
+  last: 2026-10-01
+  cadence_days: 90

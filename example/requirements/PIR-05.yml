@@ -1,0 +1,47 @@
+# SEED EXAMPLE. The insider and onboarding-fraud requirement. Content is inferred
+# from the threat profile rather than observed. See D-24, which argues the
+# boundary this record encodes: the consumer is joint, and the intent is
+# charter-bound.
+id: PIR-05
+title: Insider and fraudulent-carrier access to ledger and credential paths
+status: active
+retired_reason: null
+# Joint on purpose. An insider requirement with security as its only consumer is
+# the shape that ends with an intelligence team adjudicating colleagues.
+consumer: [security-lead, hr-lead, legal, fraud-operations]
+decision: >
+  Whether to tighten enumerated access on a ledger or credential path, whether
+  to add a verification step to carrier onboarding, and whether to open a
+  charter-bound review through the named legal owner.
+threat_profile_refs: [CJ-01, CJ-05, ACTOR-03, ACTOR-04]
+intent: insider          # charter-bound, human-only at every automation rung
+eei:
+  - id: EEI-05-1
+    question: >
+      Has any principal without an enumerated business reason read, copied or
+      enumerated a ledger export or credential store?
+    sources: [SRC-02]
+    gap: >
+      Partial. SRC-02 answers this with near-perfect precision for the decoy
+      estate, where no legitimate reader exists. The equivalent check on real
+      stores is blocked until the legitimate-exception list is enumerated once,
+      which is a first-quarter task. Until then a detection on the real path
+      fires on the exceptions.
+  - id: EEI-05-2
+    question: >
+      What carrier-identity fraud and impersonation tradecraft is currently being
+      run against onboarding flows and support desks like this one?
+    sources: [SRC-01, SRC-06]
+    gap: null
+  - id: EEI-05-3
+    question: >
+      Is anyone advertising, soliciting or recruiting insider access at a freight
+      or payments platform?
+    sources: [SRC-01]
+    gap: >
+      Open reporting sees recruitment that gets written up, which lags. Closing
+      it properly means closed-source access, which the program declines to buy at
+      this stage and substitutes deception for.
+review:
+  last: 2026-10-01
+  cadence_days: 90

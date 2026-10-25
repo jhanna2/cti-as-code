@@ -1,0 +1,11 @@
+{
+  "_comment": "FALSE POSITIVE guard for DC-07. A read of a REAL settlement export in the same prefix as the decoy. A correct detection must NOT fire here: the decoy detection keys on the decoy object, not on the prefix, so legitimate reads of neighbouring real objects are silent.",
+  "event": {
+    "op": "GetObject",
+    "key": "s3://ledger-exports-prod/settlements/2026-q3/export-00003.csv.gz",
+    "principal": "arn:aws:iam::acct:role/vendor-reporting-runner",
+    "source_ip": "10.42.7.19",
+    "ts": "2026-09-03T02:15:01Z",
+    "bytes": 52428800
+  }
+}

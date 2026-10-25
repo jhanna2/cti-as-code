@@ -1,0 +1,57 @@
+# SEED EXAMPLE. External open reporting, pulled rather than paid for.
+# Referenced by PIR-03/EEI-03-2 as the partial cover for a named gap.
+id: SRC-01
+name: Vendor advisories and security research, RSS and scrape
+class: open-hostile        # see docs/CONTRACTS.md, handling classes
+type: reporting
+serves: [PIR-03, PIR-05, PIR-06, PIR-08]
+health: healthy
+retention_days: 730
+provenance:
+  # Where it actually comes from. Boilerplate values; the shape is the point.
+  origin:
+    transport: rss+http
+    feeds:
+      - url: https://example-vendor.test/blog/feed.xml
+        format: rss-2.0
+        publisher: vendor research blog
+      - url: https://example-cert.test/advisories/feed.atom
+        format: atom
+        publisher: national CERT advisories
+    scrape:
+      # Some publishers put a summary in the feed and the substance on the page.
+      enabled: true
+      follow_link_field: item.link
+      allow_hosts: [example-vendor.test, example-cert.test]
+      robots: respected
+      user_agent: ctiac-collector/0.1 (security research; contact security@)
+  collection:
+    collector: ctiac.collect.rss
+    cadence_minutes: 30
+    backoff: exponential, 4 attempts, then health degraded
+    dedupe_key: sha256(canonical_url + published_at)
+  landing:
+    raw_object: s3://ex-cti-raw/open/rss/{yyyy}/{mm}/{dd}/{sha256}.json
+    raw_immutable: true
+    parser: ctiac.parse.article
+  store:
+    system: intel-store
+    dataset: intel_raw
+    table: documents
+    key_fields: [doc_id, source_id, canonical_url, published_at, sha256, sanitised_at]
+  access:
+    method: read via intel-store API
+    auth: oidc, role ex-cti-ro
+    owner_team: cti
+  handling:
+    sanitisation: required
+    reason: >
+      Feed and page bodies are attacker-reachable. Anyone can publish a post, and
+      an advisory quoting attacker output quotes it verbatim. Treated as
+      open-hostile even when the publisher is reputable, because the publisher is
+      not the author of every string in the document.
+notes: >
+  Cheapest useful external source and the one most likely to rot silently: feeds
+  move, publishers switch to JS-rendered pages, and a scrape returns 200 with an
+  empty body. Health is measured on parsed items per day against baseline, not on
+  HTTP status.

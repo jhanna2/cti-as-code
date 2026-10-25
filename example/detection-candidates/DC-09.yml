@@ -1,0 +1,17 @@
+# SEED EXAMPLE. See docs/CONTRACTS.md for the contract and its CI gates.
+id: DC-09
+title: Authentication attempt with the canary integration credential
+pir: PIR-08
+origin: deception
+hunt_ref: null
+attack: [T1078.004, T1552.001]
+confidence: high
+logic_sketch: >
+  Any authentication attempt, successful or not, with the canary key. No
+  allowlist, no threshold. The key authorises nothing and no system uses it.
+not_covered:
+  - An attacker who reads the configuration file and uses only the live entries
+  - Credentials copied from a backup that predates the canary
+fixtures:
+  true_positive: fixtures/deception/canary_credential_use.json
+  false_positive: fixtures/deception/live_credential_use.json

@@ -1,0 +1,10 @@
+{
+  "_comment": "FALSE POSITIVE guard for DC-08. The same token used from an ASN it has used every day for 90 days. A correct detection must NOT fire.",
+  "event": {
+    "integration_id": "carrier-connector-0042",
+    "source_ip": "198.51.100.24",
+    "source_asn": "AS64500",
+    "known_asns_90d": ["AS64500", "AS64501"],
+    "ts": "2026-09-11T21:41:03Z"
+  }
+}

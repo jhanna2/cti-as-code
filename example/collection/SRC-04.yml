@@ -1,0 +1,46 @@
+# SEED EXAMPLE. The collection management framework seed. One file per source;
+# the value is in the joins to requirements/, not in the records themselves.
+id: SRC-04
+name: Object storage access logs, ledger export buckets
+class: internal
+type: telemetry
+serves: [PIR-03, PIR-08]
+health: healthy            # healthy | degraded | dead
+retention_days: 90
+provenance:
+  owner_team: platform-storage
+  asset: ex-ledger-exports-usea1
+  location: aws/us-east-1
+  emitter: s3 data events -> cloudtrail
+  scope:
+    buckets: [ex-ledger-exports-usea1, ex-ledger-exports-euw1]
+    prefixes: ["settlements/", "reconciliation/"]
+    excluded: ["settlements/_tmp/"]   # excluded ranges are a visibility gap, not a tidy-up
+  collection:
+    collector: managed, platform-owned
+    cadence: continuous
+    latency_p50_minutes: 3
+    latency_p99_minutes: 15
+    volume_events_per_day: 12000000
+  landing:
+    raw_object: s3://ex-logs-prod/cloudtrail/data-events/
+    raw_immutable: true
+  store:
+    system: siem
+    dataset: cloud_audit
+    table: s3_data_events
+    key_fields: [event_time, bucket, key, principal_arn, source_ip, user_agent, request_id, bytes_transferred]
+  access:
+    method: siem query api
+    auth: oidc, role ex-cti-ro
+    owner_team: detection-engineering
+  handling:
+    sanitisation: not applicable
+    reason: >
+      Structured control-plane records, owned and trusted on ingest. Object keys
+      and user_agent are attacker-influenceable and are escaped on render.
+notes: >
+  Retention silently bounds every scope conclusion drawn from this source.
+  Confirm the real value in week one rather than assuming the default. The
+  excluded prefix above is the kind of detail that decides whether a scoping
+  answer is true, and it is invisible unless the record carries it.

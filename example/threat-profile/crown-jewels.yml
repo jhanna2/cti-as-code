@@ -1,0 +1,34 @@
+# SEED. The crown jewels register, machine-readable so requirements, campaigns,
+# and candidates cite an asset by ID rather than describing it. See docs/CONTRACTS.md.
+# The organisation is fictional: a freight-booking platform where shippers book
+# loads with carriers. Every name in this tree is invented.
+crown_jewels:
+  - id: CJ-01
+    asset: Payment ledger and settlement exports
+    loss_shape: Fraudulent payouts or diverted settlements, unrecoverable once paid out
+    recoverable: false
+  - id: CJ-02
+    asset: Dispatch configuration and routing engine
+    loss_shape: One compromise reaches every booking and every carrier
+    recoverable: partial
+  - id: CJ-03
+    asset: Availability of the booking platform on peak days
+    loss_shape: Outage at quarter end or peak season stops freight moving and settlement running
+    recoverable: slow
+  - id: CJ-04
+    asset: Shipper and carrier commercial data
+    loss_shape: Theft or exposure of negotiated rates, customer lists and lane volumes
+    recoverable: false
+  - id: CJ-05
+    asset: Identity, single sign-on and vendor integration credentials
+    loss_shape: The key to CJ-01 through CJ-03
+    recoverable: on-rotation
+  # Listed separately from CJ-03 on purpose. CJ-03 is the outcome; this is the
+  # layer that reaches it without touching the core platform: connectors held by
+  # carrier-telematics and warehouse vendors, each with its own owner, standing
+  # trust and logging. Collapsing the two hides that the slowest-to-notice path
+  # is the one with the least telemetry.
+  - id: CJ-06
+    asset: Vendor connectors for carrier telematics and warehouse systems
+    loss_shape: Manipulated or withheld data misroutes loads, or the connector becomes a path in
+    recoverable: partial

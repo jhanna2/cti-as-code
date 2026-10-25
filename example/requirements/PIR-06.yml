@@ -1,0 +1,52 @@
+# SEED EXAMPLE. The vendor-integration requirement, added when the profile was
+# corrected to reflect that the platform trusts a set of vendor connectors. It
+# leads with gaps rather than sources, which is the honest shape here. See D-23.
+id: PIR-06
+title: Disruption or entry through vendor connectors and integrations
+status: active
+retired_reason: null
+consumer: [security-lead, integrations-engineering, operations-lead]
+decision: >
+  Whether to audit or disable a vendor connector, re-verify the boundary between
+  vendor-held trust and the dispatch system, and raise connector exposure to
+  leadership as a risk finding.
+threat_profile_refs: [CJ-03, CJ-06, ACTOR-05, ACTOR-07]
+intent: decision-support
+eei:
+  - id: EEI-06-1
+    question: >
+      Which vendor connectors exist, by vendor and scope, and what does each one
+      log?
+    sources: []
+    gap: >
+      No source. This inventory usually lives in contracts and integration tickets
+      rather than in a CMDB, and there is no threat model without it. Named as a
+      gap rather than assigned to a source that does not exist. This is the first
+      question to ask, and it is answered by asking, not by collecting.
+  - id: EEI-06-2
+    question: >
+      Which vendors hold standing trust into the platform, by what path, and under
+      whose identity?
+    sources: []
+    gap: >
+      No source. The highest-value finding available in this area and the one
+      least likely to be documented, because these grants are made once, during
+      onboarding of the vendor, and then forgotten. Answered by configuration
+      review jointly with integrations engineering.
+  - id: EEI-06-3
+    question: >
+      Is there pre-positioning activity against logistics software vendors or
+      telematics providers relevant to the platform's regions and carriers?
+    sources: [SRC-05]
+    gap: null
+  - id: EEI-06-4
+    question: >
+      Has a connector vendor or integration partner been compromised?
+    sources: [SRC-01, SRC-05]
+    gap: >
+      Partial. Public disclosure catches the large cases and misses small
+      vendors entirely, and the vendor list this needs to be joined against is
+      owned by procurement rather than by security.
+review:
+  last: 2026-10-01
+  cadence_days: 90

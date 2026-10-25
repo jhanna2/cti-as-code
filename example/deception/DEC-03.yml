@@ -1,0 +1,16 @@
+# SEED EXAMPLE. A canary credential placed where a stolen integration config
+# would be read. See docs/CONTRACTS.md for the contract and its CI gates.
+id: DEC-03
+type: canary-credential
+placement: vendor-integration-config
+plausibility: >
+  Formatted like a real integration key for the platform's carrier connector,
+  stored beside the live entries in the same configuration file, with a name
+  that follows the vendor-naming convention and a creation date inside the
+  rotation window.
+fires_on: [authenticate]
+candidate: DC-09
+pir: PIR-08
+maintenance:
+  refresh_days: 60
+  owner: cti-lead

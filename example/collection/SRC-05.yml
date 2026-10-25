@@ -1,0 +1,69 @@
+# SEED EXAMPLE. External open reporting on the logistics-software and telematics
+# threat landscape. The platform's own inventory of vendor connectors is
+# deliberately NOT a record here: it does not exist, and PIR-06 carries it as a
+# named gap instead.
+id: SRC-05
+name: Logistics sector and transport-software advisory reporting
+class: open
+type: reporting
+serves: [PIR-06]
+health: healthy
+retention_days: 1825       # vendor relationships and integrations outlive staff
+provenance:
+  origin:
+    transport: rss+http
+    feeds:
+      - url: https://example-transport-isac.test/advisories/feed.xml
+        format: rss-2.0
+        publisher: transport-sector information sharing body
+      - url: https://example-tms-vendor.test/security/feed.xml
+        format: rss-2.0
+        publisher: transport management software vendor advisories
+      - url: https://example-telematics.test/reports/feed.xml
+        format: atom
+        publisher: telematics provider threat reporting
+    scrape:
+      enabled: false
+      # Advisories carry the substance in the feed item. The reason to note this
+      # is that it makes the record cheaper to trust than SRC-01.
+  collection:
+    collector: ctiac.collect.rss
+    cadence_minutes: 360
+    backoff: exponential, 4 attempts, then health degraded
+    dedupe_key: sha256(advisory_id + revision)
+  landing:
+    raw_object: s3://ex-cti-raw/open/transport/{yyyy}/{mm}/{dd}/{sha256}.json
+    raw_immutable: true
+    parser: ctiac.parse.advisory
+  store:
+    system: intel-store
+    dataset: intel_raw
+    table: documents
+    key_fields: [doc_id, source_id, advisory_id, vendor, product, cve, published_at, sha256]
+    join_keys:
+      # The join that gives this source its value, and the one that does not
+      # resolve yet. Named here so the dependency is visible in the record.
+      - vendor connector inventory by vendor and product (does not exist; PIR-06/EEI-06-1)
+  access:
+    method: read via intel-store API
+    auth: oidc, role ex-cti-ro
+    owner_team: cti
+  handling:
+    sanitisation: required
+    reason: >
+      Advisory bodies quote attacker-supplied strings and third-party research
+      verbatim, and vendor security pages are ordinary web content. Class is
+      open rather than open-hostile because the publishers are a small, named
+      set, but the prose still passes the sanitiser before any model reads it.
+  quality:
+    expected_items_per_day: 15
+    false_positive_basis: >
+      Relevance rather than truth is the failure mode. Almost all of this
+      reporting concerns products the platform does not use, so precision depends
+      entirely on the inventory join above. Without it the source is a reading list.
+notes: >
+  The most tractable part of an otherwise uncollectable area, and the reason the
+  program can claim a warning capability on day one while being honest that it
+  has no internal view of its vendor connectors at all. Its value is capped by
+  EEI-06-1: until the connector inventory exists this filters on region and
+  actor rather than on what is actually integrated.

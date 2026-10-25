@@ -1,0 +1,64 @@
+# SEED EXAMPLE. Carrier onboarding and support-desk ticket history. Almost never
+# treated as intelligence, and the only substantive internal source on
+# carrier-identity fraud and impersonation tradecraft, because the tickets
+# record the story the caller told. See docs/DECISIONS.md (D-24).
+id: SRC-06
+name: Carrier onboarding and support tickets, identity and payout changes
+class: internal
+type: operations
+serves: [PIR-05]
+health: healthy
+retention_days: 730
+provenance:
+  owner_team: support-operations
+  asset: servicedesk-prod
+  location: saas/eu-west
+  collection:
+    collector: ctiac.collect.servicedesk
+    cadence_minutes: 60
+    # Pull is scoped to the ticket categories that carry the tradecraft. A full
+    # export would be a standing privacy exposure for no analytic gain.
+    scope: >
+      categories: carrier-onboarding, payout-account-change, mfa-re-enrollment,
+      dispatcher-access-escalation
+    dedupe_key: ticket_id + updated_at
+  landing:
+    raw_object: s3://ex-cti-raw/internal/servicedesk/{yyyy}/{mm}/{dd}/{ticket_id}.json
+    raw_immutable: true
+  store:
+    system: siem
+    dataset: security_events
+    table: servicedesk_identity_requests
+    key_fields: [ticket_id, opened_at, category, requester_id, agent_id, channel, verification_method]
+    join_keys:
+      - identity and IdP events by requester_id
+      - campaigns observations by pretext pattern
+  access:
+    method: siem query api
+    auth: oidc, role ex-cti-ro
+    owner_team: detection-engineering
+  handling:
+    sanitisation: required
+    reason: >
+      The analytic value is in the free-text narrative, which is written by an
+      agent quoting a caller who may be the adversary. It is the one internal
+      source whose body is genuinely attacker-authored, so it is handled as
+      untrusted prose despite being internal.
+  privacy:
+    # Stated in the record because the insider argument (D-24) is that the
+    # boundary has to be mechanical rather than asserted.
+    basis: security of processing, scoped to named ticket categories
+    fields_excluded: [free_text_personal_details, bank_account_numbers]
+    named_person_analysis: >
+      Requires a charter-bound request through the named legal owner. Aggregate
+      and pretext-pattern analysis does not.
+  quality:
+    expected_items_per_day: 40
+    false_positive_basis: >
+      High legitimate volume by design, since most payout changes are genuine.
+      This is not a detection source. It is a tradecraft source: the unit of
+      analysis is the pretext pattern across tickets, not the individual ticket.
+notes: >
+  The pretext is the signal. A caller's story is reusable, so the same story
+  appearing at several platforms is exactly the case sector sharing exists for,
+  and it is shareable without naming any employee or carrier.

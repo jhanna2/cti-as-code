@@ -1,0 +1,21 @@
+# SEED EXAMPLE. A candidate that came from a hunt rather than from deception.
+# See docs/CONTRACTS.md for the contract and its CI gates.
+id: DC-08
+title: First use of an integration token from a previously unseen ASN
+pir: PIR-08
+origin: hunt
+hunt_ref: hunts/2026-09-integration-token-first-use
+attack: [T1078.004]
+confidence: moderate
+logic_sketch: >
+  For each integration token, alert when a request arrives from an ASN not seen
+  for that token in the last 90 days. Tokens used by vendor-hosted jobs that
+  legitimately move between networks are listed in an exception file reviewed
+  quarterly.
+not_covered:
+  - Use from an ASN the vendor already shares with the attacker, such as the same cloud provider
+  - Tokens younger than the 90-day baseline
+  - Vendor connectors that proxy all requests through one fixed address
+fixtures:
+  true_positive: fixtures/hunt/token_new_asn.json
+  false_positive: fixtures/hunt/token_known_asn.json

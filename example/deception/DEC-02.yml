@@ -1,0 +1,13 @@
+# SEED EXAMPLE. See docs/CONTRACTS.md for the contract and its CI gates.
+id: DEC-02
+type: decoy-object
+placement: ledger-export-storage
+plausibility: >
+  Named, sized and dated like a nightly settlement export, in a prefix adjacent
+  to live exports, with mtime tracking the real settlement job.
+fires_on: [read, copy, list-with-prefix]
+candidate: DC-07
+pir: PIR-03
+maintenance:
+  refresh_days: 30
+  owner: cti-lead

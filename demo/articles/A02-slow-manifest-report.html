@@ -1,0 +1,26 @@
+<html><head><title>SLOW MANIFEST: settlement diversion through booking platforms</title></head><body>
+<article>
+<h1>SLOW MANIFEST: settlement diversion through booking platforms</h1>
+<p class="meta">Published 2026-08-27 &middot; vendor threat report &middot; source class: open</p>
+<p>We track a cluster designated SLOW MANIFEST targeting freight-booking
+platforms at several operators. The objective in every observed intrusion has
+been settlement and payout data rather than credentials, ransom, or persistence
+for its own sake.</p>
+<h2>Observed tradecraft</h2>
+<ul>
+  <li>Initial access via an integration token recovered from a vendor-side
+      support portal. No exploitation of the platform itself was observed.</li>
+  <li>Enumeration of object storage using the integration's own credentials,
+      preferring <code>ListObjectsV2</code> with a prefix filter over full
+      bucket listing.</li>
+  <li>Staged egress of settlement exports to an S3-compatible endpoint under
+      actor control, throttled to resemble a reporting job.</li>
+  <li>Cleanup limited to control-plane audit suppression where the token
+      permitted it.</li>
+</ul>
+<p>Mapped techniques: T1530 data from cloud storage, T1078.004 valid cloud
+accounts, T1567.002 exfiltration to cloud storage.</p>
+<p>We assess with moderate confidence that the actor is contracted rather than
+strategic, based on target selection tracking quarter-end settlement cycles.</p>
+</article>
+</body></html>

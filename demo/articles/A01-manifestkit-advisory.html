@@ -1,0 +1,15 @@
+<html><head><title>ManifestKit 3.2.1 security release</title></head><body>
+<article>
+<h1>ManifestKit 3.2.1 security release</h1>
+<p class="meta">Published 2026-08-19 &middot; ManifestKit maintainers &middot; source class: open</p>
+<p>ManifestKit 3.2.1 fixes <b>EX-2026-0001</b>, a deserialisation flaw in the
+booking-manifest importer. A crafted manifest file processed by
+<code>manifestkit.io.load_manifest()</code> can achieve remote code execution in
+the importing process.</p>
+<p>All versions before 3.2.1 are affected. There is no configuration-level
+mitigation; the importer path is reached by any call that reads a manifest from
+an untrusted path. CVSS 8.8.</p>
+<p>Operators who accept manifests from third parties should treat this as
+priority. Upgrade to 3.2.1 or later.</p>
+</article>
+</body></html>

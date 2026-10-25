@@ -1,0 +1,25 @@
+# SEED EXAMPLE. See docs/CONTRACTS.md.
+id: PIR-08
+title: Integration and service credential theft and abuse
+status: active
+retired_reason: null
+consumer: [security-lead, platform-ops]
+decision: >
+  Whether to force integration token rotation and tighten first-use-from-new-ASN
+  alerting across vendor connectors.
+threat_profile_refs: [ACTOR-02, CJ-05]
+eei:
+  - id: EEI-08-1
+    question: Which integration tokens have been used from a previously unseen ASN?
+    sources: [SRC-04]
+    gap: null
+  - id: EEI-08-2
+    question: Which infrastructure has this actor staged on, and what else shares it?
+    sources: [SRC-03, SRC-01]
+    gap: >
+      Registration and passive-DNS history is bought, not built. SRC-03 covers
+      the pivot; what it cannot answer is infrastructure that never resolves
+      publicly, which is a placement problem no purchase closes.
+review:
+  last: 2026-10-01
+  cadence_days: 90

@@ -1,0 +1,66 @@
+# SEED EXAMPLE. Deception telemetry. The one source that generates original
+# intelligence rather than recording the platform's own operations.
+# See docs/DECISIONS.md (D-05).
+id: SRC-02
+name: Deception estate telemetry, decoy and canary fire events
+class: internal
+type: deception
+serves: [PIR-03, PIR-05, PIR-08]
+health: healthy
+retention_days: 1095       # longer than ordinary telemetry, on purpose
+provenance:
+  owner_team: cti
+  # Deliberately enumerated: a decoy nobody can name is a decoy nobody refreshes.
+  emitters:
+    - decoy_ref: DEC-02
+      kind: decoy-object
+      asset: ex-ledger-exports-usea1
+      location: aws/us-east-1
+      path: s3://ex-ledger-exports-usea1/settlements/2026-q3/
+      fires_on: any GetObject or HeadObject against the decoy prefix
+      emitter: s3 data events -> cloudtrail
+    - decoy_ref: DEC-03
+      kind: canary-credential
+      asset: vendor-integration-config
+      location: aws/us-east-1
+      identifier: AKIA-EXAMPLE-CANARY-0003
+      fires_on: any authentication attempt, successful or not
+      emitter: cloudtrail sts/iam events
+  collection:
+    collector: ctiac.collect.canary
+    cadence: event-driven
+    latency_p50_seconds: 20
+    latency_p99_seconds: 180
+  landing:
+    raw_object: s3://ex-cti-raw/internal/deception/{yyyy}/{mm}/{dd}/{event_id}.json
+    raw_immutable: true
+  store:
+    system: siem
+    dataset: security_events
+    table: deception_fires
+    key_fields: [event_id, decoy_ref, fired_at, principal_arn, source_ip, user_agent, request_id]
+    join_keys:
+      - deception/{decoy_ref}.yml
+      - campaigns observations by decoy_ref
+  access:
+    method: siem query api
+    auth: oidc, role ex-cti-ro
+    owner_team: detection-engineering
+  handling:
+    sanitisation: not applicable
+    reason: >
+      Structured, owned, and emitted by the platform's own control plane. Not
+      attacker-authored prose, so it does not pass the prose sanitiser. Fields
+      carrying attacker-controlled strings (user_agent, request_id) are escaped
+      on render and never interpolated into a query or a prompt.
+  quality:
+    expected_events_per_day: 0
+    false_positive_basis: >
+      No legitimate reader exists, so the rate is a property of how completely
+      the legitimate exceptions were enumerated once, not of estate drift. Any
+      nonzero day is an incident or a broken exclusion, and both are findings.
+notes: >
+  Volume is near zero by construction, which breaks the usual health check.
+  Liveness is proven by a scheduled synthetic fire against a non-production
+  decoy, not by counting events. A source that is silent because it is broken
+  looks identical to one that is silent because it is working.

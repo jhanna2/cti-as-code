@@ -1,0 +1,11 @@
+# SEED EXAMPLE. The agent contract. See docs/CONTRACTS.md for its CI gates.
+name: ttp-extractor
+trigger: new-item-in-queue
+model: example-frontier-model
+approval: review-required
+untrusted_inputs: true
+evaluation_set: evals/ttp-extractor/
+budget_usd_per_day: 15
+blind_spots:
+  - Novel tradecraft with no ATT&CK or ATLAS mapping is silently dropped
+  - Confidence is not calibrated against report quality, only against ensemble agreement

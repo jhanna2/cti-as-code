@@ -1,0 +1,72 @@
+# SEED EXAMPLE. A paid, structured feed. Carries the licensing terms, because
+# redistribution is the part that surfaces in an audit rather than in a build.
+# The vendor is fictional.
+id: SRC-03
+name: Infrastructure pivot feed, registrant and hosting history
+class: open                # structured vendor data, not attacker-authored prose
+type: feed
+serves: [PIR-08]
+health: healthy
+retention_days: 365
+provenance:
+  vendor: Example Infrastructure Intelligence
+  product: Pivot API
+  contract:
+    account: example-cti
+    seats: 1
+    queries_per_month: 25000
+    renewal: 2027-03-31
+    owner_team: cti
+  origin:
+    transport: rest-api
+    base_url: https://api.example-infra-intel.test/v1/pivot/
+    endpoints:
+      - path: /
+        purpose: pivot on registrant, nameserver, certificate hash, ASN
+      - path: /expand/
+        purpose: expand a shared attribute into a candidate infrastructure set
+    auth:
+      method: api key
+      secret_ref: secretsmanager://ex-cti/infra-intel/api-key
+      rotation_days: 90
+  collection:
+    collector: ctiac.collect.infra_pivot
+    cadence: on-demand plus daily re-check of tracked selectors
+    quota_guard: hard stop at 80 percent of monthly quota, health degraded
+    selectors_ref: collection-plan/selectors/infra-pivot.yml
+  landing:
+    raw_object: s3://ex-cti-raw/vendor/infra-pivot/{yyyy}/{mm}/{dd}/{query_hash}.json
+    raw_immutable: true
+  store:
+    system: intel-store
+    dataset: intel_enrichment
+    table: infrastructure_pivots
+    key_fields: [query_hash, domain, first_seen, registrar, ns_hash, cert_hash, risk_score, retrieved_at]
+  access:
+    method: read via intel-store API
+    auth: oidc, role ex-cti-ro
+    owner_team: cti
+  licensing:
+    # The row most likely to be skipped and most expensive to skip.
+    redistribution: prohibited
+    derived_indicators: permitted internally only
+    sector_sharing: prohibited without written vendor consent
+    max_tlp_on_share: TLP:RED
+    retention_max_days: 365
+    audit_note: >
+      Enforced at the export boundary, not by convention. Any product assembled
+      for a member or a partner is checked against source licensing before it
+      leaves, and a record sourced here blocks the export rather than silently
+      degrading it.
+  handling:
+    sanitisation: field-scoped
+    reason: >
+      The response is structured and the vendor is trusted, but the values are
+      not: domain names, registrant strings and WHOIS free-text are
+      attacker-chosen. Those fields are treated as open-hostile on render and are
+      never interpolated into a query, a prompt, or a filename.
+notes: >
+  Bought for access, not for software. This is the half of the build-versus-buy
+  line that headcount cannot produce: passive DNS and registration history at
+  scale is placement, not code. Vendor is evaluated on whether it answers by API
+  rather than only by portal, which is a build-versus-buy criterion (D-15).

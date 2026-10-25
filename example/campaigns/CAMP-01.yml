@@ -1,0 +1,61 @@
+# SEED EXAMPLE. Clusters observations of one actor across collection tiers.
+# See docs/CONTRACTS.md for the contract and its CI gates.
+id: CAMP-01
+name: CAMPAIGN-001
+status: active
+merged_into: null
+first_seen: 2026-08-20
+assessment: >
+  Contracted actor diverting settlements and staging ledger exports from a
+  freight platform via a stolen vendor integration token. Target selection
+  tracks quarter-end settlement cycles.
+confidence: moderate
+pirs: [PIR-03, PIR-08]
+observations:
+  - id: OBS-01
+    source_tier: external-open
+    ref: report/slow-manifest-2026-08-27
+    ttps: [T1530, T1078.004, T1567.002]
+  - id: OBS-02
+    source_tier: internal-deception
+    ref: DEC-02
+    ttps: [T1530]
+  - id: OBS-03
+    source_tier: external-shared
+    ref: sharing/peer-sighting-0044
+    ttps: [T1078.004]
+
+# Suspected correspondence with publicly named clusters. Not an attribution
+# claim. Nothing in the repository resolves through this block: no PIR, decoy or
+# candidate cites a public name, so an entry here can be argued, downgraded or
+# withdrawn without touching the cluster it annotates. That separation is the
+# point. `would_change` is required and is the test the entry has to pass, per
+# docs/DECISIONS.md (D-11): an external name is worth what it changes, and an
+# entry that changes nothing is recorded as changing nothing rather than quietly
+# promoted to a finding.
+public_overlap:
+  - name: SLOW MANIFEST
+    named_by: external-open
+    ref: report/slow-manifest-2026-08-27
+    confidence: low
+    basis: >
+      Shared techniques (T1530, T1078.004) and comparable target selection.
+      The overlap is on technique and target class only, which is the weakest
+      basis available: both are common to the whole actor class in
+      threat-profile/actors.yml, so this is consistency rather than evidence.
+    would_change: >
+      Nothing today. Becomes worth holding if the public reporting carries
+      post-access behaviour not yet observed here, which would tell a responder
+      where else to look, or a target history that forecasts which parts of the
+      estate this actor reaches next.
+
+naming:
+  convention: >
+    The internal name is a flat designator on purpose. An evocative name reads
+    as a claim about who the actor is, gets repeated outside the context that
+    qualified it, and becomes expensive to withdraw once a slide carries it.
+    CAMPAIGN-001 asserts only that these observations cluster. Evocative names
+    belong to whoever published them and live in public_overlap.
+  retirement: >
+    A name is retired only by merge, never by re-scoping. If the next cluster
+    does not fit the name, it is a new campaign, not a redefinition of this one.

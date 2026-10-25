@@ -1,0 +1,19 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Validate the example program
+        run: ctiac validate example/
+      - name: Trace requirements to collection, candidates and campaigns
+        run: ctiac trace example/
+      - name: List named gaps
+        run: ctiac gaps example/
+      - name: Tests (gates, sanitiser, canary)
+        run: pytest -q

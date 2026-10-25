@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+build/
+dist/
+
+# scraped originals, retained as evidence, never committed
+/raw/
+
+# working notes and drafts, not part of the repository
+/drafts/

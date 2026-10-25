@@ -1,0 +1,19 @@
+# SEED EXAMPLE. A case where the reviewer agreed with the model, kept because
+# agreement is also data: it is the baseline the drift measurement compares to.
+id: CASE-0002
+item_ref: advisory/manifestkit-2026-08-19
+reviewer: cti-lead
+reviewed_at: 2026-08-21T09:05:00Z
+features:
+  attack: []
+  pir_match: [PIR-06]
+  source_tier: external-open
+disposition: resolve-against-inventory
+model_proposed: resolve-against-inventory
+agreed_with_model: full
+confidence: high
+reasoning: >
+  A vendor library advisory with a version range. It resolves against the
+  connector inventory, which is the gap named in EEI-06-1, so the disposition
+  here is to ask for the inventory rather than to hunt.
+embedding: null

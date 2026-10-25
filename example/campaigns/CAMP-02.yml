@@ -1,0 +1,18 @@
+# SEED EXAMPLE. A campaign retired by merge, which is the only way a name is
+# retired (see the naming block in CAMP-01).
+id: CAMP-02
+name: CAMPAIGN-002
+status: merged
+merged_into: CAMP-01
+first_seen: 2026-09-04
+assessment: >
+  Opened for two vendor-token sign-ins from a single hosting provider. Merged
+  into CAMP-01 when the same provider and the same token-handling pattern
+  appeared in OBS-03, which made the two clusters one.
+confidence: low
+pirs: [PIR-08]
+observations:
+  - id: OBS-01
+    source_tier: internal-telemetry
+    ref: DC-08
+    ttps: [T1078.004]

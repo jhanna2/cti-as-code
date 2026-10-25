@@ -1,0 +1,20 @@
+# SEED EXAMPLE. An adjudicated triage decision. Human-written only; the agent has
+# no write access to this tree. Feeds the assurance loop (retrieval + drift baseline).
+# See docs/SYSTEMS.md.
+id: CASE-0001
+item_ref: report/slow-manifest-2026-08-27
+reviewer: cti-lead
+reviewed_at: 2026-09-01T15:20:00Z
+features:
+  attack: [T1530, T1078.004, T1567.002]
+  pir_match: [PIR-03, PIR-08]
+  source_tier: external-open
+disposition: escalate-and-hunt
+model_proposed: pitch-candidate      # what the agent proposed, for drift measurement
+agreed_with_model: partial           # human escalated where the model only pitched
+confidence: moderate
+reasoning: >
+  Behavioural report mapping onto the two highest-loss PIRs. Not a version check,
+  so it converts to a hunt rather than a package resolution. Escalated above the
+  model's pitch because the tradecraft matches an active campaign (CAMP-01).
+embedding: null                       # populated by the indexer, not by hand

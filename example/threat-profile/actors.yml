@@ -1,0 +1,60 @@
+# SEED. Actor classes, machine-readable. Each carries capability, intent toward the
+# organisation, and targeting mode, so the actor ranking can score the directed and
+# opportunistic paths separately (see docs/SYSTEMS.md, actor prioritisation).
+# ACTOR-02 is the class the CAMP-01 seed (CAMPAIGN-001) instantiates.
+actors:
+  - id: ACTOR-01
+    class: Organised payment-fraud group
+    objective: Diverted settlements, fraudulent carrier payouts, stolen payment details
+    targets: [CJ-01, CJ-04]
+    capability: high
+    intent_toward_us: high
+    targeting_mode: directed
+  - id: ACTOR-02
+    class: Contracted intrusion actor
+    objective: Whatever the contract specifies; target choice tracks settlement cycles
+    targets: [CJ-01, CJ-02, CJ-05]
+    capability: high
+    intent_toward_us: moderate
+    targeting_mode: directed
+  - id: ACTOR-03
+    class: Malicious insider
+    objective: Theft or sabotage from a position of trust
+    targets: [CJ-01, CJ-05, CJ-04]
+    capability: moderate
+    intent_toward_us: conditional
+    targeting_mode: directed
+  - id: ACTOR-04
+    class: Fraudulent carrier or broker
+    objective: Win loads or payouts by defeating carrier onboarding, then divert freight or payment
+    targets: [CJ-01, CJ-05]
+    capability: moderate
+    intent_toward_us: high
+    targeting_mode: directed
+  - id: ACTOR-05
+    class: State-linked pre-positioning
+    objective: Access held for later disruption of freight movement
+    targets: [CJ-03]
+    capability: high
+    intent_toward_us: moderate
+    targeting_mode: directed
+  - id: ACTOR-06
+    class: Opportunistic commodity
+    objective: Monetise whatever is exposed; no target preference
+    targets: [CJ-03, CJ-02]
+    capability: moderate
+    intent_toward_us: none          # the point: intent is zero, exposure is not
+    targeting_mode: opportunistic   # scored by capability x our weakness, not intent
+    habitual_ttps: [T1190, T1486]   # exploit public-facing app; data encrypted for impact
+  # Exists only because the platform trusts vendors. Separated from ACTOR-03
+  # because the insider was hired and this actor was admitted through a vendor,
+  # which is a different control set, signal set and owner. Separated from
+  # ACTOR-02 because the first access is the vendor's, not the platform's.
+  - id: ACTOR-07
+    class: Vendor and supply-chain access
+    objective: >
+      Reach the platform through the vendors that hold standing trust into it
+    targets: [CJ-06, CJ-02, CJ-01]
+    capability: moderate
+    intent_toward_us: conditional
+    targeting_mode: directed

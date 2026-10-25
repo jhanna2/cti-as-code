@@ -1,0 +1,19 @@
+# The agent's proposed change: a new requirement drafted from a vendor report.
+# It reads well and it is wrong in two ways the gates can see.
+id: PIR-09
+title: Payout redirection through impersonated carrier accounts
+status: active
+retired_reason: null
+consumer: [fraud-operations]
+decision: >
+  Whether to require a callback verification before any change to a carrier's
+  payout account.
+threat_profile_refs: [CJ-01, ACTOR-09]
+eei:
+  - id: EEI-09-1
+    question: Which payout-account changes in the last 90 days were requested by a caller who failed verification?
+    sources: [SRC-07]
+    gap: null
+review:
+  last: 2026-10-24
+  cadence_days: 90

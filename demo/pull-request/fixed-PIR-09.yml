@@ -1,0 +1,24 @@
+# The same change after review. The actor reference now resolves to a class that
+# exists (ACTOR-04). The question names the ticket source that really holds the
+# answer for part of it (SRC-06) and names what is still missing instead of
+# pointing at a source that does not exist.
+id: PIR-09
+title: Payout redirection through impersonated carrier accounts
+status: active
+retired_reason: null
+consumer: [fraud-operations, security-lead]
+decision: >
+  Whether to require a callback verification before any change to a carrier's
+  payout account.
+threat_profile_refs: [CJ-01, ACTOR-04]
+eei:
+  - id: EEI-09-1
+    question: Which payout-account changes in the last 90 days were requested by a caller who failed verification?
+    sources: [SRC-06]
+    gap: >
+      Partial. SRC-06 records the verification method on each ticket, but the
+      payout system's own change log is not a collected source, so changes made
+      outside the support desk are invisible.
+review:
+  last: 2026-10-24
+  cadence_days: 90

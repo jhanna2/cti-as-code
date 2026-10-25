@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use or build on this work, please cite it as below."
+title: "CTI as code: the threat intelligence program as version-controlled, CI-validated records"
+abstract: >
+  Cyber threat intelligence as code. Priority intelligence requirements,
+  collection sources, decoys, detection candidates, campaigns, adjudicated
+  cases and agent contracts held as version-controlled records whose
+  cross-references and standards are enforced as CI gates, with a reference
+  implementation and a worked example program.
+type: software
+authors:
+  - family-names: Hanna
+    given-names: Jeff
+version: 0.1.0
+date-released: 2026-10-24
+license: Apache-2.0
+repository-code: "https://github.com/jhanna2/cti-as-code"
+url: "https://github.com/jhanna2/cti-as-code"
+keywords:
+  - cyber threat intelligence
+  - intelligence requirements
+  - collection management
+  - detection as code
+  - deception
+  - AI agents

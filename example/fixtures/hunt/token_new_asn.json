@@ -1,0 +1,10 @@
+{
+  "_comment": "TRUE POSITIVE for DC-08. The first request from an ASN this token has not used in 90 days.",
+  "event": {
+    "integration_id": "carrier-connector-0042",
+    "source_ip": "203.0.113.58",
+    "source_asn": "AS64511",
+    "known_asns_90d": ["AS64500", "AS64501"],
+    "ts": "2026-09-11T21:39:58Z"
+  }
+}

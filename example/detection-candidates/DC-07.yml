@@ -1,0 +1,18 @@
+# SEED EXAMPLE. See docs/CONTRACTS.md for the contract and its CI gates.
+id: DC-07
+title: Read of decoy settlement export in ledger export storage
+pir: PIR-03
+origin: deception
+hunt_ref: null
+attack: [T1530]
+confidence: high
+logic_sketch: >
+  Any GetObject against the decoy prefix. No allowlist, no threshold. The object
+  has no legitimate reader, so occurrence is the signal.
+not_covered:
+  - Reads via a compromised control-plane credential that bypasses the API path
+  - Anything inside a vendor-hosted reporting workload
+  - Copy operations performed entirely within the storage backend
+fixtures:
+  true_positive: fixtures/deception/decoy_read.json
+  false_positive: fixtures/deception/adjacent_prefix_read.json

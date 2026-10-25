@@ -1,0 +1,11 @@
+{
+  "_comment": "TRUE POSITIVE for DC-07. A read of the decoy settlement export. No legitimate reader exists, so occurrence is the signal. Any tool that fires on this and not on the adjacent read is correct.",
+  "event": {
+    "op": "GetObject",
+    "key": "s3://ledger-exports-prod/settlements/2026-q3/decoy-export-00007.csv.gz",
+    "principal": "arn:aws:iam::acct:role/vendor-reporting-runner",
+    "source_ip": "10.42.7.19",
+    "ts": "2026-09-03T02:14:55Z",
+    "bytes": 52428800
+  }
+}
